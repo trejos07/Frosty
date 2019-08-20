@@ -59,8 +59,12 @@ namespace Frosty.Networking{
                 float y = E.data["position"]["y"].f;
                 float z = E.data["position"]["z"].f;
 
+
+                Vector3 pos = new Vector3(x, y, z);
+                Debug.Log(string.Format("player {0} moves to {1}",id,pos));
+
                 NetworkIdentity ni = serverObjects[id];
-                ni.transform.position = new Vector3(x,y,z);
+                ni.transform.position = pos;
             });
 
             On("disconnected", (E) => {

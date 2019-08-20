@@ -32,13 +32,16 @@ io.on('connection', function(socket){
             socket.emit('spawn', players[playerID]);
     }
 
-    socket.on('updatePosition',function(data){
+    socket.on('updatePosition',function(data){//cuando me mueva 
 
-        player.position.x = data.position.x.value;
-        player.position.y = data.position.y.value;
-        player.position.z = data.position.z.value;
+        //console.log(data.position._x);
+        player.position.x = parseFloat(data.position._x);//actualizo mi representacion en el server
+        player.position.y = parseFloat(data.position._y);
+        player.position.z = parseFloat(data.position._z);
         
-        socket.broadcast.emit('updatePosition',player);
+        //console.log(player.position.ConsoleOutput());
+
+        socket.broadcast.emit('updatePosition',player);// le digo a los demas que me movi 
 
         // var d ={         // crear pequeños Objetos JSON es otra forma mas optima de enviar informacion 
         //     id ="",

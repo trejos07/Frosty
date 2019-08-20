@@ -6,13 +6,14 @@ namespace Frosty.Networking
     [Serializable]
     public class Position : ISerializationCallbackReceiver
     {
-        public float x;
-        public float y;
-        public float z;
+        [NonSerialized] public float x;
+        [NonSerialized] public float y;
+        [NonSerialized] public float z;
 
-        public string _x;
-        public string _y;
-        public string _z;
+
+        [SerializeField]public string _x;
+        [SerializeField] public string _y;
+        [SerializeField] public string _z;
 
         public void OnAfterDeserialize()
         {

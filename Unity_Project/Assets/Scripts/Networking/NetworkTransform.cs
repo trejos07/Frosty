@@ -63,11 +63,7 @@ namespace Frosty.Networking
             player.position.y = transform.position.y.TwoDecimals();
             player.position.z = transform.position.z.TwoDecimals();
 
-            Debug.Log(player.position.ToString());
-
             string json = JsonUtility.ToJson(player);
-            Debug.Log(json);
-
             networkIdentity.Socket.Emit("updatePosition", new JSONObject(json));
         }
     }
