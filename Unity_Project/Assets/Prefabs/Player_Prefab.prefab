@@ -103,6 +103,8 @@ GameObject:
   - component: {fileID: 784341469646508686}
   - component: {fileID: 8611921247951997839}
   - component: {fileID: 5279854622303011388}
+  - component: {fileID: 6650545258264160589}
+  - component: {fileID: 6557632418451504487}
   m_Layer: 0
   m_Name: Player_Prefab
   m_TagString: Untagged
@@ -166,3 +168,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   networkIdentity: {fileID: 784341469646508686}
+  playerController: {fileID: 0}
+--- !u!114 &6650545258264160589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4560096200294291284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e664e31dfbf31e84597db99b1fc50c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  horizontalSpeed: 4
+  horizontalDisplacementBoundary: 6
+--- !u!114 &6557632418451504487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4560096200294291284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fafbd68f159e39469c5bd30efdbb3b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

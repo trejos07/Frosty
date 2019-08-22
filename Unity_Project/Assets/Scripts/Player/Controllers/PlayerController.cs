@@ -8,6 +8,12 @@ public class PlayerController : MonoBehaviour
     private IController controller; //The controller is an interface variable that can read a class that encloses it
     private Engine mEngine;
 
+
+    private void Awake()
+    {
+        mEngine = GetComponent<Engine>();
+    }
+
     private void Start()
     {
         //mPlayer = GetComponent<Player>();
@@ -18,10 +24,10 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    // Update is called once per frame
-    void Update()
+    
+    public void ExecuteMove()
     {
-        if(controller != null)
+        if (controller != null)
         {
             mEngine.Move(controller.MoveHorizontal()); //Detect inputs from the controller each frame
         }

@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
-[RequireComponent(typeof(Rigidbody2D))]
+//[RequireComponent(typeof(Collider))]
+//[RequireComponent(typeof(Rigidbody2D))]
 public class Engine : MonoBehaviour
 {
     [SerializeField] private float horizontalSpeed = 4;

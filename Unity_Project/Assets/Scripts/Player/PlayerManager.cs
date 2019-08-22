@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Frosty.Networking;
 
+
+[RequireComponent(typeof(PlayerController))]
 public class PlayerManager : MonoBehaviour
 {
 
@@ -11,20 +13,18 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Class References")]
     [SerializeField] private NetworkIdentity networkIdentity;
+    [SerializeField] private PlayerController playerController;
+
+    private void Awake()
+    {
+        playerController = GetComponent<PlayerController>();
+    }
 
     void Update()
     {
         if (networkIdentity.IsControlling)
         {
-            CheckMovement();
+            playerController.ExecuteMove();
         }
-    }
-
-    private void CheckMovement()
-    {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        transform.position += new Vector3(horizontal,0, vertical)*speed*Time.deltaTime;
     }
 }
