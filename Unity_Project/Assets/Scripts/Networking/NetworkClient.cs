@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
+using Frosty.Networking;
+using Frosty.Scriptables;
 
 namespace Frosty.Networking{
     public class NetworkClient : SocketIOComponent
@@ -10,6 +12,7 @@ namespace Frosty.Networking{
         [Header("Network Cliente")]
         [SerializeField] private Transform networkContiner;
         [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private ServerObjects serverSpawnables;
 
         public static string ClientID { get; private set; }
 
@@ -54,18 +57,74 @@ namespace Frosty.Networking{
 
             On("updatePosition", (E) => {
 
-                string id = E.data["id"].ToString().RemoveQuotes(); ;
-                float x = E.data["position"]["x"].f;
-                float y = E.data["position"]["y"].f;
-                float z = E.data["position"]["z"].f;
+                string id = E.data["id"].ToString().RemoveQuotes();
+                float x = E.data["position"]["x"].str.ParseFloat();
+                float y = E.data["position"]["y"].str.ParseFloat();
+                float z = E.data["position"]["z"].str.ParseFloat();
 
 
                 Vector3 pos = new Vector3(x, y, z);
-                Debug.Log(string.Format("player {0} moves to {1}",id,pos));
+                //Debug.Log(string.Format("player {0} moves to {1}",id,pos));
 
                 NetworkIdentity ni = serverObjects[id];
                 ni.transform.position = pos;
             });
+
+            On("updateRotation", (E) =>
+            {
+                string id = E.data["id"].ToString().RemoveQuotes();
+                float x = E.data["rotation"]["x"].str.ParseFloat();
+                float y = E.data["rotation"]["y"].str.ParseFloat();
+                float z = E.data["rotation"]["z"].str.ParseFloat();
+
+                Vector3 rot = new Vector3(x, y, z);
+
+
+                NetworkIdentity ni = serverObjects[id];
+                ni.GetComponent<Player>().SetRotation(rot);
+            });
+
+            On("serverSpawn", (E) =>{
+
+                string name = E.data["name"].str;
+                string id = E.data["id"].ToString().RemoveQuotes();
+                
+
+                Debug.LogFormat("Server wants us to Spawn a '{0}'", name);
+                if(!serverObjects.ContainsKey(id))
+                {
+                    ServerObjectData sod = serverSpawnables.GetObjectByName(name);
+                    var spawnwedObject = Instantiate(sod.Prefab, networkContiner);
+
+                    float x = E.data["position"]["x"].str.ParseFloat();
+                    float y = E.data["position"]["y"].str.ParseFloat();
+                    float z = E.data["position"]["z"].str.ParseFloat();
+
+                    spawnwedObject.transform.position = new Vector3(x, y, z);
+                    var ni = spawnwedObject.GetComponent<NetworkIdentity>();
+                    ni.SetControllerID(id);
+                    ni.SetSocketReference(this);
+
+                    if(name == "Bullet"){
+                        float dir_x = E.data["direction"]["x"].str.ParseFloat();
+                        float dir_y = E.data["direction"]["y"].str.ParseFloat();
+                        float dir_z = E.data["direction"]["z"].str.ParseFloat();
+                        spawnwedObject.transform.rotation = Quaternion.LookRotation(new Vector3(dir_x, dir_y, dir_z),Vector3.up);
+                    }
+
+                    serverObjects.Add(id, ni);
+                }
+
+            });
+
+            On("serverUnspawn", (E) => {
+                string id = E.data["id"].ToString().RemoveQuotes();
+                NetworkIdentity ni = serverObjects[id];
+                serverObjects.Remove(id);
+                DestroyImmediate(ni.gameObject);
+
+            });
+
 
             On("disconnected", (E) => {
                 string id = E.data["id"].ToString().RemoveQuotes();
@@ -83,3 +142,12 @@ namespace Frosty.Networking{
     }
 }
 
+
+[Serializable]
+public class BulletData
+{
+    public string id;
+    public VectorData position; 
+    public VectorData direction; 
+
+}

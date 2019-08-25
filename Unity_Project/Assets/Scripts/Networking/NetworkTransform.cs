@@ -14,7 +14,7 @@ namespace Frosty.Networking
         [SerializeField] [GreyOut] private Vector3 oldPosition;
 
         private NetworkIdentity networkIdentity;
-        private Player player;
+        private PlayerData player;
 
         private float stillCounter = 0;
 
@@ -22,8 +22,8 @@ namespace Frosty.Networking
         {
             networkIdentity = GetComponent<NetworkIdentity>();
             oldPosition = transform.position;
-            player = new Player();
-            player.position = new Position();
+            player = new PlayerData();
+            player.position = new VectorData();
 
             player.position.x = 0;
             player.position.y = 0;
@@ -59,9 +59,7 @@ namespace Frosty.Networking
         private void SendData()
         {
             //Update player information
-            player.position.x = transform.position.x.TwoDecimals();
-            player.position.y = transform.position.y.TwoDecimals();
-            player.position.z = transform.position.z.TwoDecimals();
+            player.position = transform.position.TwoDecimals();
 
             string json = JsonUtility.ToJson(player);
             networkIdentity.Socket.Emit("updatePosition", new JSONObject(json));

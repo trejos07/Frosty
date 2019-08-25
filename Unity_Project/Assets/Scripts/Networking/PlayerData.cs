@@ -4,9 +4,10 @@
 namespace Frosty.Networking
 {
     [Serializable]
-    public class Player
+    public class PlayerData
     {
         public string id;
-        public Position position;
+        public VectorData position;
+        public VectorData rotation;
     }
 }
